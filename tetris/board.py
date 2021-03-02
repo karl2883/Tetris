@@ -16,6 +16,18 @@ class Board:
         for i in range(cells_y):
             self.grid.append([None] * cells_x)
 
+    def check_full_lines(self):
+        line_full = False
+        for row_ind in range(len(self.grid)):
+            if all(self.grid[row_ind]):
+                line_full = True
+                for new_row_ind in range(row_ind-1, 0, -1):
+                    t = self.grid[new_row_ind].copy()
+                    self.grid[new_row_ind+1] = t.copy()
+        if line_full:
+            return True
+        return False
+
     def draw(self, window):
         # outlines
         for i in range(self.cells_x):

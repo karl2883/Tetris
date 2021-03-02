@@ -22,7 +22,7 @@ clock = pygame.time.Clock()
 
 
 board = Board(10, 20, 0, 0, WIDTH, HEIGHT)
-current_piece = Piece("O", board)
+current_piece = Piece.generate_piece(board)
 
 frames = 0
 left_timeout = 0
@@ -46,8 +46,12 @@ while run:
     left_timeout, right_timeout, fall_ready, rotating_left, rotating_right = check_input(left_timeout, right_timeout, keys, current_piece, rotating_left, rotating_right)
     if not frames % 15 or fall_ready:
         if not current_piece.fall():
+            board.check_full_lines()
             current_piece = Piece.generate_piece(board)
-    current_piece.fill_in()
+            if not current_piece:
+                run = False
+    if run:
+        current_piece.fill_in()
     board.draw(win)
     pygame.display.update()
 

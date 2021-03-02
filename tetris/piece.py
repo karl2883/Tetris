@@ -18,7 +18,12 @@ class Piece:
     def generate_piece(cls, board):
         form_list = ["I", "O", "T", "J", "L", "S", "Z"]
         form = form_list[random.randint(0, 6)]
-        return Piece(form, board)
+        p = Piece(form, board)
+        pos = [[p.x + piece[0], p.y + piece[1]] for piece in p.pieces]
+        for piece in pos:
+            if p.board.grid[piece[1]][piece[0]]:
+                return False
+        return p
 
     def __init__(self, form, board):
         self.form = form
