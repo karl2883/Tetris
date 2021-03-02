@@ -27,6 +27,8 @@ current_piece = Piece("O", board)
 frames = 0
 left_timeout = 0
 right_timeout = 0
+rotating_right = False
+rotating_left = False
 
 
 while run:
@@ -41,7 +43,7 @@ while run:
     win.fill(BLACK)
 
     keys = pygame.key.get_pressed()
-    left_timeout, right_timeout, fall_ready = check_input(left_timeout, right_timeout, keys, current_piece)
+    left_timeout, right_timeout, fall_ready, rotating_left, rotating_right = check_input(left_timeout, right_timeout, keys, current_piece, rotating_left, rotating_right)
     if not frames % 15 or fall_ready:
         if not current_piece.fall():
             current_piece = Piece.generate_piece(board)

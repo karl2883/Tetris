@@ -62,8 +62,75 @@ class Piece:
         self.x += 1
         return True
 
-    def rotate(self):
-        pass
+    def rotate_left(self):
+        if self.form == "O":
+            return
+        # special case
+        elif self.form == "I":
+            i_positions = [
+                [[-2, 0], [-1, 0], [0, 0], [1, 0]],
+                [[-1, -1], [-1, 0], [-1, 1], [-1, 2]],
+                [[-2, 1], [-1, 1], [0, 1], [1, 1]],
+                [[0, -1], [0, 0], [0, 1], [0, 2]]
+            ]
+            if self.pieces[0][0] == 0:
+                pieces = i_positions[2]
+            elif self.pieces[0][0] == -1:
+                pieces = i_positions[0]
+            elif self.pieces[0][1] == 0:
+                pieces = i_positions[3]
+            else:
+                pieces = i_positions[1]
+            new_position = [[self.x + piece[0], self.y + piece[1]] for piece in pieces]
+            if not self.check_position(new_position):
+                return
+            else:
+                self.delete_from_board()
+                self.pieces = pieces.copy()
+                self.fill_in()
+        else:
+            new_position = [[self.x - piece[1], self.y + piece[0]] for piece in self.pieces]
+            if not self.check_position(new_position):
+                return
+            else:
+                self.delete_from_board()
+                self.pieces = [[-piece[1], piece[0]] for piece in self.pieces]
+                self.fill_in()
+
+    def rotate_right(self):
+        if self.form == "O":
+            return
+        # special case
+        elif self.form == "I":
+            i_positions = [
+                [[-2, 0], [-1, 0], [0, 0], [1, 0]],
+                [[-1, -1], [-1, 0], [-1, 1], [-1, 2]],
+                [[-2, 1], [-1, 1], [0, 1], [1, 1]],
+                [[0, -1], [0, 0], [0, 1], [0, 2]]
+            ]
+            if self.pieces[0][0] == 0:
+                pieces = i_positions[0]
+            elif self.pieces[0][0] == -1:
+                pieces = i_positions[2]
+            elif self.pieces[0][1] == 0:
+                pieces = i_positions[1]
+            else:
+                pieces = i_positions[3]
+            new_position = [[self.x + piece[0], self.y + piece[1]] for piece in pieces]
+            if not self.check_position(new_position):
+                return
+            else:
+                self.delete_from_board()
+                self.pieces = pieces.copy()
+                self.fill_in()
+        else:
+            new_position = [[self.x + piece[1], self.y - piece[0]] for piece in self.pieces]
+            if not self.check_position(new_position):
+                return
+            else:
+                self.delete_from_board()
+                self.pieces = [[piece[1], -piece[0]] for piece in self.pieces]
+                self.fill_in()
 
     def fall(self):
         new_position = [[self.x + piece[0], self.y + piece[1] + 1] for piece in self.pieces]
@@ -71,4 +138,5 @@ class Piece:
             return False
         self.delete_from_board()
         self.y += 1
+        self.fill_in()
         return True
